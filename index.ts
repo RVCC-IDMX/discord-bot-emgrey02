@@ -6,10 +6,15 @@ dotenv.config();
 
 let opts: IOptions = {
   text: "you're cute",
-  r: true,
+  f: 'lamb2',
 };
 
 let output: string = cowsay.say(opts);
+let fixedOutput = '';
+if (output.includes(`\`\`\``)) {
+  fixedOutput = output.replace(`\`\`\``, `'''`);
+}
+console.log(fixedOutput);
 
 const client = new DiscordJS.Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -34,22 +39,15 @@ client.on('messageCreate', (message) => {
       .catch(console.error);
   }
   if (message.content === 'cowsay') {
-    let animal = message
-      .reply(
-        `
-    \`\`\`
-    ${output}
-    \`\`\`
-    `
-      )
+    message
+      .reply(`\`\`\`${fixedOutput ? fixedOutput : output}\`\`\``)
       .then(() => {
-        console.log(animal);
         message
           .react('🍄')
           .then(() => console.log(`reacted to "${message.content}"`))
           .catch(console.error);
         message
-          .reply(`that's right`)
+          .reply(`that's right :)`)
           .then(() => console.log(`replied to "${message.content}"`))
           .catch(console.error);
       })
