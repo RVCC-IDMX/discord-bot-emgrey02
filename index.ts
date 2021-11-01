@@ -1,4 +1,4 @@
-import DiscordJS, { Intents } from 'discord.js';
+import DiscordJS, { Emoji, Intents } from 'discord.js';
 import dotenv from 'dotenv';
 import * as cowsay from 'cowsay';
 dotenv.config();
@@ -18,7 +18,14 @@ client.on('messageCreate', (message) => {
     message.reply({
       content: 'pong',
     });
-    message.react('🐌').then(console.log).catch(console.error);
+    message
+      .react('🐌')
+      .then(() => console.log(`reacted to "${message.content}"`))
+      .catch(console.error);
+    message
+      .reply('I will never miss!')
+      .then(() => console.log(`replied to "${message.content}"`))
+      .catch(console.error);
   }
   if (message.content === 'cowsay') {
     message.reply(`
@@ -26,7 +33,14 @@ client.on('messageCreate', (message) => {
     ${output}
     \`\`\`
     `);
-    message.react('🍄').then(console.log).catch(console.error);
+    message
+      .react('🍄')
+      .then(() => console.log(`reacted to "${message.content}"`))
+      .catch(console.error);
+    message
+      .reply(`what did you expect the cow to say?`)
+      .then(() => console.log(`replied to "${message.content}"`))
+      .catch(console.error);
   }
 });
 
