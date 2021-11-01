@@ -1,9 +1,15 @@
 import DiscordJS, { Emoji, Intents } from 'discord.js';
 import dotenv from 'dotenv';
 import * as cowsay from 'cowsay';
+import { IOptions } from 'cowsay';
 dotenv.config();
 
-let output: string = cowsay.say({ text: 'MOOOOOOOOOOOOO' });
+let opts: IOptions = {
+  text: "you're cute",
+  r: true,
+};
+
+let output: string = cowsay.say(opts);
 
 const client = new DiscordJS.Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -28,19 +34,33 @@ client.on('messageCreate', (message) => {
       .catch(console.error);
   }
   if (message.content === 'cowsay') {
-    message.reply(`
+    let animal = message
+      .reply(
+        `
     \`\`\`
     ${output}
     \`\`\`
-    `);
-    message
-      .react('🍄')
-      .then(() => console.log(`reacted to "${message.content}"`))
-      .catch(console.error);
-    message
-      .reply(`what did you expect the cow to say?`)
-      .then(() => console.log(`replied to "${message.content}"`))
-      .catch(console.error);
+    `
+      )
+      .then(() => {
+        console.log(animal);
+        message
+          .react('🍄')
+          .then(() => console.log(`reacted to "${message.content}"`))
+          .catch(console.error);
+        message
+          .reply(`that's right`)
+          .then(() => console.log(`replied to "${message.content}"`))
+          .catch(console.error);
+      })
+      .catch((error) => {
+        if (error.code == 50035) {
+          message
+            .reply(`I can't post that...`)
+            .then(() => console.log('error message'))
+            .catch(console.error);
+        }
+      });
   }
 });
 
