@@ -1,6 +1,9 @@
 import DiscordJS, { Intents } from 'discord.js';
 import dotenv from 'dotenv';
+import * as cowsay from 'cowsay';
 dotenv.config();
+
+let output: string = cowsay.say({ text: 'MOOOOOOOOOOOOO' });
 
 const client = new DiscordJS.Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -15,6 +18,13 @@ client.on('messageCreate', (message) => {
     message.reply({
       content: 'pong',
     });
+  }
+  if (message.content === 'cowsay') {
+    message.reply(`
+    \`\`\`
+    ${output}
+    \`\`\`
+    `);
   }
 });
 
