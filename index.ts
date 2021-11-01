@@ -18,6 +18,7 @@ client.on('messageCreate', (message) => {
     message.reply({
       content: 'pong',
     });
+    message.react('🐌').then(console.log).catch(console.error);
   }
   if (message.content === 'cowsay') {
     message.reply(`
@@ -25,6 +26,7 @@ client.on('messageCreate', (message) => {
     ${output}
     \`\`\`
     `);
+    message.react('🍄').then(console.log).catch(console.error);
   }
 });
 
