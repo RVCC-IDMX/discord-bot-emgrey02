@@ -1,10 +1,15 @@
 import * as cowsay from 'cowsay';
 import { IOptions } from 'cowsay';
 import getRandomInt from './random';
+import quotes from './quotes.json';
 
 export default function () {
+  //generate random num
+  let randomNum = getRandomInt(0, 25);
+
+  //use template literals to insert random quote
   let opts: IOptions = {
-    text: "you're cute",
+    text: `${quotes[randomNum].quote} - ${quotes[randomNum].author}`,
     r: true,
   };
 
