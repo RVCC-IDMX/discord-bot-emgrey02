@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cowsay from './utils/cowsay';
 dotenv.config();
 
-let prefix = process.env.PREFIX;
+let prefix = process.env.PREFIX!;
 
 const client = new DiscordJS.Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -14,44 +14,35 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', (message) => {
-  if (message.author.bot) return;
-  let parsedMessage = '';
-  let commands = [];
-  if (!message.content.startsWith('eg#')) {
-    return;
-  } else {
-    parsedMessage = message.content.slice(3);
-    parsedMessage = parsedMessage.trim();
-    commands = parsedMessage.split(' ');
-  }
-  console.log(commands);
+  if (!message.content.startsWith(prefix)) return;
+  let args = message.content.toLowerCase().slice(3).trim().split(' ');
 
-  if (commands.includes('ping')) {
-    message.reply({
-      content: 'pong',
-    });
-    message
-      .react('🐌')
-      .then(() => console.log(`reacted to "${message.content}"`))
-      .catch(console.error);
-    message
-      .reply('I will never miss!')
-      .then(() => console.log(`replied to "${message.content}"`))
-      .catch(console.error);
+  if (args.includes('ping')) {
+    message.reply('pong').then(console.log).catch(console.error);
+    message.react('🐌').then(console.log).catch(console.error);
+    message.reply('I will never miss!').then(console.log).catch(console.error);
   }
-  if (commands.includes('cowsay')) {
+
+  if (args.includes('cowsay')) {
+    let followingArgs = args.filter((arg) => arg != 'cowsay' && arg != 'ping');
+
+    message.react('🍄').then(console.log).catch(console.error);
+
+    try {
+      cowsay(followingArgs[0]);
+    } catch (error) {
+      message
+        .reply("sorry, that's not a valid animal.")
+        .then(console.log)
+        .catch(console.error);
+      return;
+    }
+
+    const output = cowsay(followingArgs[0]);
+
     message
-      .reply(cowsay())
-      .then(() => {
-        message
-          .react('🍄')
-          .then(() => console.log(`reacted to "${message.content}"`))
-          .catch(console.error);
-        message
-          .reply(`that's right :)`)
-          .then(() => console.log(`replied to "${message.content}"`))
-          .catch(console.error);
-      })
+      .reply(output)
+      .then(console.log)
       .catch((error) => {
         if (error.code == 50035) {
           message
@@ -60,6 +51,8 @@ client.on('messageCreate', (message) => {
             .catch(console.error);
         }
       });
+
+    message.reply("That's right :)").then(console.log).catch(console.error);
   }
 });
 
