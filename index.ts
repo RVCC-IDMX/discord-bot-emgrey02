@@ -1,20 +1,7 @@
 import DiscordJS, { Emoji, Intents } from 'discord.js';
 import dotenv from 'dotenv';
-import * as cowsay from 'cowsay';
-import { IOptions } from 'cowsay';
+import cowsay from './utils/cowsay';
 dotenv.config();
-
-let opts: IOptions = {
-  text: "you're cute",
-  f: 'lamb2',
-};
-
-let output: string = cowsay.say(opts);
-let fixedOutput = '';
-if (output.includes(`\`\`\``)) {
-  fixedOutput = output.replace(`\`\`\``, `'''`);
-}
-console.log(fixedOutput);
 
 const client = new DiscordJS.Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -40,7 +27,7 @@ client.on('messageCreate', (message) => {
   }
   if (message.content === 'cowsay') {
     message
-      .reply(`\`\`\`${fixedOutput ? fixedOutput : output}\`\`\``)
+      .reply(cowsay())
       .then(() => {
         message
           .react('🍄')
