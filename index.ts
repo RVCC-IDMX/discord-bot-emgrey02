@@ -4,7 +4,7 @@ import cowsay from './utils/cowsay';
 dotenv.config();
 
 //get bot prefix
-const PREFIX = process.env.PREFIX!;
+const PREFIX = process.env.PREFIX;
 
 //get channel codes
 const CHANNELS = process.env.CHANNELS || null;
@@ -27,7 +27,7 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', (message) => {
-  if (!message.content.startsWith(PREFIX)) return;
+  if (!message.content.startsWith(`${PREFIX}`)) return;
   if (!channels.includes(message.channel.id)) return;
 
   //separate user commands into an array of strings
