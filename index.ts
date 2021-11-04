@@ -3,8 +3,10 @@ import dotenv from 'dotenv';
 import cowsay from './utils/cowsay';
 dotenv.config();
 
-let prefix = process.env.PREFIX!;
+//get bot prefix
+const PREFIX = process.env.PREFIX!;
 
+//get channel codes
 const CHANNELS = process.env.CHANNELS || null;
 
 if (!CHANNELS) {
@@ -15,6 +17,7 @@ if (!CHANNELS) {
 const channels = CHANNELS.split(',');
 console.table(channels);
 
+//create client
 const client = new DiscordJS.Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
@@ -24,27 +27,42 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', (message) => {
-  if (!message.content.startsWith(prefix)) return;
+  if (!message.content.startsWith(PREFIX)) return;
   if (!channels.includes(message.channel.id)) return;
+
+  //separate user commands into an array of strings
   let args = message.content.toLowerCase().slice(3).trim().split(' ');
 
   if (args.includes('ping')) {
-    message.reply('pong').then(console.log).catch(console.error);
-    message.react('🐌').then(console.log).catch(console.error);
-    message.reply('I will never miss!').then(console.log).catch(console.error);
+    message
+      .reply('pong')
+      .then(() => console.log('pong reply sent.'))
+      .catch(console.error);
+    message
+      .react('🐌')
+      .then(() => console.log('ping reaction sent.'))
+      .catch(console.error);
+    message
+      .reply('I will never miss!')
+      .then(() => console.log('custom pong reply sent.'))
+      .catch(console.error);
   }
 
   if (args.includes('cowsay')) {
+    //filter out args
     let followingArgs = args.filter((arg) => arg != 'cowsay' && arg != 'ping');
 
-    message.react('🍄').then(console.log).catch(console.error);
+    message
+      .react('🍄')
+      .then(() => console.log('cowsay reaction sent.'))
+      .catch(console.error);
 
     try {
       cowsay(followingArgs[0]);
     } catch (error) {
       message
         .reply("sorry, that's not a valid animal.")
-        .then(console.log)
+        .then(() => console.log('error message sent.'))
         .catch(console.error);
       return;
     }
@@ -53,7 +71,12 @@ client.on('messageCreate', (message) => {
 
     message
       .reply(output)
-      .then(console.log)
+      .then(() =>
+        message
+          .reply("That's right :)")
+          .then(() => console.log('cowsay output success reply'))
+          .catch(console.error)
+      )
       .catch((error) => {
         if (error.code == 50035) {
           message
@@ -62,8 +85,6 @@ client.on('messageCreate', (message) => {
             .catch(console.error);
         }
       });
-
-    message.reply("That's right :)").then(console.log).catch(console.error);
   }
 });
 
