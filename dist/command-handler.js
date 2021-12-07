@@ -33,7 +33,7 @@ exports.default = (client) => {
     }
     console.log(commands);
     client.on('messageCreate', (message) => {
-        if (message.author.bot || !message.content.startsWith('#eg')) {
+        if (message.author.bot) {
             return;
         }
         if (!message.content.startsWith(`${PREFIX}`))
