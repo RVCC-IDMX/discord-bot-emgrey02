@@ -1,22 +1,7 @@
 import DiscordJS, { Intents } from 'discord.js';
 import 'dotenv/config';
 import dotenv from 'dotenv';
-import cowsay from './utils/cowsay';
-// dotenv.config();
-
-// //get bot prefix
-// const PREFIX = process.env.PREFIX;
-
-// //get channel codes
-// const CHANNELS = process.env.CHANNELS || null;
-
-// if (!CHANNELS) {
-//   console.error('CHANNELS is not defined');
-//   process.exit(1);
-// }
-
-// const channels = CHANNELS.split(',');
-// console.table(channels);
+import cowsay from './commands/cowsay';
 
 //create client
 const client = new DiscordJS.Client({
@@ -62,34 +47,3 @@ client.login(process.env.TOKEN);
 //     .react('🍄')
 //     .then(() => console.log('cowsay reaction sent.'))
 //     .catch(console.error);
-
-//   try {
-//     cowsay(followingArgs[0]);
-//   } catch (error) {
-//     message
-//       .reply("sorry, that's not a valid animal.")
-//       .then(() => console.log('error message sent.'))
-//       .catch(console.error);
-//     return;
-//   }
-
-//   const output = cowsay(followingArgs[0]);
-
-//   message
-//     .reply(output)
-//     .then(() =>
-//       message
-//         .reply("That's right :)")
-//         .then(() => console.log('cowsay output success reply'))
-//         .catch(console.error)
-//     )
-//     .catch((error) => {
-//       if (error.code == 50035) {
-//         message
-//           .reply(`I can't post that...`)
-//           .then(() => console.log('error message'))
-//           .catch(console.error);
-//       }
-//     });
-//   }
-// });

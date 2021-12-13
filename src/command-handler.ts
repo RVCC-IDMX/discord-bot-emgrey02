@@ -60,6 +60,12 @@ export default (client: Client) => {
     try {
       commands[commandName].callback(message, ...args);
     } catch (error) {
+      if (error.code === 'ENOENT') {
+        message
+          .reply("sorry, that's not a valid animal.")
+          .then(() => console.log('error message sent.'))
+          .catch(console.error);
+      }
       console.error(error);
     }
   });
