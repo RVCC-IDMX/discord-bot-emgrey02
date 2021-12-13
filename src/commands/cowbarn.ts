@@ -24,6 +24,11 @@ export default {
       fixedOutput = output.replace(`\`\`\``, `'''`);
     }
 
+    if (fixedOutput.length > 4096) {
+      let diff: number = fixedOutput.length - 4096;
+      fixedOutput = fixedOutput.slice(0, fixedOutput.length - (diff + 10));
+    }
+
     let finalOutput = `\`\`\`${fixedOutput ? fixedOutput : output}\`\`\``;
 
     const cowbarn = new MessageEmbed()
@@ -36,7 +41,7 @@ export default {
         true
       )
       .addField('\u200B', '\u200B')
-      .addField('Animal:', `${args[0]}`, true)
+      .addField('Drawing:', `${args[0]}`, true)
       .addField('You win:', 'a cool dog pic', true)
       .setImage(
         'https://res.cloudinary.com/greypse/image/upload/w_200,h_200,c_fill,e_hue:-85/IMG_8813_dmjsgp.jpg'
@@ -57,12 +62,6 @@ export default {
         console.log('success');
       })
       .catch((err) => {
-        if (err.code === 50035) {
-          message
-            .reply(`I can't post that...`)
-            .then(() => console.log('error message sent'))
-            .catch(console.error);
-        }
         console.error(err);
       });
   },
