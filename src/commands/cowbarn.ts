@@ -3,7 +3,6 @@ import { IOptions } from 'cowsay';
 import getRandomInt from '../utils/random';
 import quotes from '../utils/quotes.json';
 import { Message, MessageEmbed } from 'discord.js';
-import { channel } from 'diagnostics_channel';
 
 export default {
   callback: (message: Message, ...args: string[]) => {
